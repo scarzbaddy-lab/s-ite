@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do They Hurt You On Purpose? | Unscarred</title>
+    <meta name="description" content="Discover if someone hurts you intentionally or accidentally. Assess their awareness, conscience, and intent to understand the pattern.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+    <style>
+        :root {
+            --bg-void: #050507;
+            --bg-deep: #0a0a0f;
+            --card-glass: rgba(12, 12, 18, 0.85);
+            --primary: #a33b5c;
+            --primary-glow: rgba(163, 59, 92, 0.4);
+            --secondary: #7c5cbf;
+            --accent: #c9763d;
+            --text-main: #ece8e1;
+            --text-soft: #9a958c;
+            --text-dim: #5c5955;
+            --border-glass: rgba(255,255,255,0.06);
+            --radius-lg: 20px;
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Outfit', system-ui, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.6;
+            color: var(--text-main);
+            background: var(--bg-void);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(163, 59, 92, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(124, 92, 191, 0.08) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--primary); }
+
+        .back-link {
+            color: var(--text-soft);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 16px;
+            border: 1px solid var(--border-glass);
+            border-radius: 999px;
+            transition: all 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--text-main);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .quiz-container {
+            background: var(--card-glass);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-glass);
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 600;
+            font-style: italic;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            color: var(--text-soft);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .intro-dimensions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .dimension-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(163, 59, 92, 0.1);
+            border: 1px solid rgba(163, 59, 92, 0.2);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            color: var(--text-soft);
+        }
+
+        .question {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .question:last-of-type {
+            border-bottom: none;
+        }
+
+        .question-number {
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .answer-option {
+            display: block;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid var(--border-glass);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-soft);
+        }
+
+        .answer-option:hover {
+            border-color: var(--primary);
+            background: rgba(163, 59, 92, 0.1);
+            color: var(--text-main);
+        }
+
+        .answer-option.selected {
+            border-color: var(--primary);
+            background: rgba(163, 59, 92, 0.2);
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .answer-option input[type="radio"] {
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .answer-option label {
+            cursor: pointer;
+            display: inline;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-soft);
+            border: 1px solid var(--border-glass);
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(255,255,255,0.3);
+            color: var(--text-main);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #8a2a4a);
+            color: white;
+            box-shadow: 0 8px 30px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px var(--primary-glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quiz-section { display: none; }
+        .quiz-section.active { display: block; }
+        .result-page { display: none; }
+        .result-page.active { display: block; }
+
+        .result-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-glass);
+        }
+
+        .result-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-style: italic;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .result-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-soft);
+        }
+
+        .result-content {
+            line-height: 1.8;
+        }
+
+        .result-content h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            margin: 30px 0 15px 0;
+            color: var(--text-main);
+        }
+
+        .result-content p {
+            margin-bottom: 20px;
+            color: var(--text-soft);
+        }
+
+        .result-content ul {
+            margin: 20px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .result-content li {
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
+            color: var(--text-soft);
+        }
+
+        .result-content li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), #8a2a4a);
+            color: white;
+            padding: 16px 40px;
+            text-decoration: none;
+            border-radius: 999px;
+            font-weight: 600;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px var(--primary-glow);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px var(--primary-glow);
+        }
+
+        @media (max-width: 600px) {
+            .quiz-container { padding: 24px; }
+            h1 { font-size: 1.8rem; }
+            .navigation { flex-direction: column; gap: 12px; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="logo">un<span>scarred</span></a>
+            <a href="../quizzes.html" class="back-link">← All Quizzes</a>
+        </header>
+
+        <div class="quiz-container">
+            <!-- Intro -->
+            <div id="introSection">
+                <h1>Do They Hurt You On Purpose?</h1>
+                <p class="subtitle">This quiz assesses three dimensions: their <strong>awareness</strong> (do they see what they're doing?), their <strong>conscience</strong> (do they feel remorse?), and their <strong>intent</strong> (is it accidental or purposeful?). The combination tells you what you're actually dealing with.</p>
+                
+                <div class="intro-dimensions">
+                    <div class="dimension-pill"><span>👁️</span> Awareness Level</div>
+                    <div class="dimension-pill"><span>💔</span> Conscience</div>
+                    <div class="dimension-pill"><span>🎯</span> Intent</div>
+                </div>
+
+                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 24px;">22 questions · 6-8 minutes · Deep pattern analysis</p>
+
+                <button class="btn btn-primary" onclick="startQuiz()">Start the Quiz →</button>
+            </div>
+
+            <!-- Quiz Section -->
+            <div id="quizSection" class="quiz-section">
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+                </div>
+                
+                <div id="questionsContainer"></div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>Previous</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+                </div>
+            </div>
+
+            <!-- Result Page -->
+            <div id="resultPage" class="result-page"></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                section: 1,
+                text: "When someone close to you says 'we need to talk,' what happens in their body/mind first?",
+                answers: [
+                    { text: "They don't seem to notice much, they just wait to hear what you want", value: "a" },
+                    { text: "They immediately start running through what they might have done wrong", value: "b" },
+                    { text: "Something shifts but they can't really name what it is", value: "c" },
+                    { text: "They notice your tone, posture, timing - gathering data before you speak", value: "d" }
+                ]
+            },
+            {
+                section: 1,
+                text: "How much do they remember about arguments or conflicts after they happen?",
+                answers: [
+                    { text: "They remember the feeling but details are fuzzy or gone", value: "a" },
+                    { text: "They remember specific words, sequence of events, what was said", value: "b" },
+                    { text: "They're often surprised when told you fought", value: "c" },
+                    { text: "They replay conversations multiple times, catching things missed in the moment", value: "d" }
+                ]
+            },
+            {
+                section: 1,
+                text: "When they're in a situation where you might get upset, what's happening internally for them?",
+                answers: [
+                    { text: "They're usually caught off guard when you react - didn't see it coming", value: "a" },
+                    { text: "They're tracking micro-expressions and adjusting what they say", value: "b" },
+                    { text: "They tend to space out or go blank during tense moments", value: "c" },
+                    { text: "They're running multiple scenarios of how this could go", value: "d" }
+                ]
+            },
+            {
+                section: 1,
+                text: "Do they change how they act depending on who they're with?",
+                answers: [
+                    { text: "Not really - they're the same with everyone", value: "a" },
+                    { text: "Yes, and they're very aware of making those adjustments", value: "b" },
+                    { text: "People say they're different with different people but they don't notice", value: "c" },
+                    { text: "Constantly calibrating based on what works with each person", value: "d" }
+                ]
+            },
+            {
+                section: 1,
+                text: "When you accuse them of something they don't think they did, what happens?",
+                answers: [
+                    { text: "They feel confused, like you're talking about different realities", value: "a" },
+                    { text: "They immediately know whether they did it and can trace back the moment", value: "b" },
+                    { text: "They genuinely can't remember if they did it or not", value: "c" },
+                    { text: "They can see how you interpreted it even if that wasn't their intent", value: "d" }
+                ]
+            },
+            {
+                section: 1,
+                text: "How aware are they of what they're trying to accomplish in conversations?",
+                answers: [
+                    { text: "Usually just responding, not aware of an agenda", value: "a" },
+                    { text: "Very aware - they know what they want and steer toward it", value: "b" },
+                    { text: "They often realize afterward what they were probably trying to do", value: "c" },
+                    { text: "Simultaneously having the conversation and watching themselves have it", value: "d" }
+                ]
+            },
+            {
+                section: 1,
+                text: "When they hurt your feelings, how do they typically find out?",
+                answers: [
+                    { text: "You tell them later and they're genuinely surprised", value: "a" },
+                    { text: "They usually know in the moment from your reaction", value: "b" },
+                    { text: "Sometimes they never find out unless someone else tells them", value: "c" },
+                    { text: "They can tell immediately and are already calculating next moves", value: "d" }
+                ]
+            },
+            {
+                section: 1,
+                text: "How much energy does being around other people take from them?",
+                answers: [
+                    { text: "Not much - they go on autopilot", value: "a" },
+                    { text: "A lot - they're working the entire time, tracking and adjusting", value: "b" },
+                    { text: "They don't notice it draining until way after, then crash", value: "c" },
+                    { text: "Exhausting - aware of everything they're doing AND everything others are doing", value: "d" }
+                ]
+            },
+            {
+                section: 1,
+                text: "When they think back on their own behavior in relationships, what do they see?",
+                answers: [
+                    { text: "Patterns others point out but they have trouble seeing themselves", value: "a" },
+                    { text: "Very clear patterns - they can see exactly what they do and when", value: "b" },
+                    { text: "Mostly blank spots or a general feeling they weren't really there", value: "c" },
+                    { text: "Too much - they see every move and analyze it constantly", value: "d" }
+                ]
+            },
+            {
+                section: 1,
+                text: "If you asked 'why did you just do that?' in the moment, how would they respond?",
+                answers: [
+                    { text: "'Do what? I don't know what you mean' (genuinely confused)", value: "a" },
+                    { text: "They'd know exactly what you meant and have reasons ready", value: "b" },
+                    { text: "They'd probably freeze or go blank trying to figure it out", value: "c" },
+                    { text: "They'd have multiple explanations depending on what seems safest", value: "d" }
+                ]
+            },
+            {
+                section: 2,
+                text: "When they realize they've hurt someone, what happens inside them?",
+                answers: [
+                    { text: "They feel terrible and it stays with them for days", value: "a" },
+                    { text: "They feel bad in the moment but it fades pretty quickly", value: "b" },
+                    { text: "They think about how to fix it so things go back to normal", value: "c" },
+                    { text: "They mostly think about whether you'll hold it against them", value: "d" }
+                ]
+            },
+            {
+                section: 2,
+                text: "If they could go back and undo hurt they've caused, would they?",
+                answers: [
+                    { text: "Absolutely - they'd give anything to take back specific things", value: "a" },
+                    { text: "Yes, though they're not always sure what they'd do differently", value: "b" },
+                    { text: "Only if it would improve their current situation", value: "c" },
+                    { text: "Probably not - what's done is done, they'd rather move forward", value: "d" }
+                ]
+            },
+            {
+                section: 2,
+                text: "When you tell them they hurt you, what's their first internal response?",
+                answers: [
+                    { text: "Guilt or shame, even before knowing what they did", value: "a" },
+                    { text: "Concern about what happened and how you're feeling", value: "b" },
+                    { text: "Frustration that you're making this a problem", value: "c" },
+                    { text: "Calculation about how to respond to minimize consequences", value: "d" }
+                ]
+            },
+            {
+                section: 2,
+                text: "Do they think about people they've hurt after the relationship ends?",
+                answers: [
+                    { text: "Yes, and it haunts them sometimes", value: "a" },
+                    { text: "Sometimes - they wonder if they're okay", value: "b" },
+                    { text: "Only if it's relevant to their current life", value: "c" },
+                    { text: "Not really - once it's over, they move on", value: "d" }
+                ]
+            },
+            {
+                section: 2,
+                text: "If they knew they could hurt someone and get away with it completely, what stops them?",
+                answers: [
+                    { text: "They couldn't live with themselves", value: "a" },
+                    { text: "It would feel wrong even if no one knew", value: "b" },
+                    { text: "Nothing stops them if they have a good reason", value: "c" },
+                    { text: "Only the possibility they might not actually get away with it", value: "d" }
+                ]
+            },
+            {
+                section: 3,
+                text: "If they've ever been unfaithful or crossed lines, what was happening?",
+                answers: [
+                    { text: "They've never done anything like that", value: "a" },
+                    { text: "It happened gradually - didn't realize they'd crossed a line", value: "b" },
+                    { text: "They knew something was developing but convinced themselves it wasn't that bad", value: "c" },
+                    { text: "They compartmentalized it - knew what they were doing, managed both situations", value: "d" }
+                ]
+            },
+            {
+                section: 3,
+                text: "When they're upset with you, do they pull away emotionally?",
+                answers: [
+                    { text: "No, they stay engaged even when things are hard", value: "a" },
+                    { text: "They disappear into themselves but don't realize until you point it out", value: "b" },
+                    { text: "They go quiet because they need space, not trying to punish", value: "c" },
+                    { text: "They've learned going cold gets your attention and makes you accommodate them", value: "d" }
+                ]
+            },
+            {
+                section: 3,
+                text: "When you set a boundary they don't like, what do they do?",
+                answers: [
+                    { text: "They respect it even if they disagree", value: "a" },
+                    { text: "They push back because it feels unfair, but not trying to violate it", value: "b" },
+                    { text: "They test whether you really mean it", value: "c" },
+                    { text: "They find ways around it while technically not breaking your rule", value: "d" }
+                ]
+            },
+            {
+                section: 3,
+                text: "Have they kept something from you because telling you would cause problems for them?",
+                answers: [
+                    { text: "No, they're transparent even when it's uncomfortable", value: "a" },
+                    { text: "Yes, and they felt guilty about it the whole time", value: "b" },
+                    { text: "Yes, but they convinced themselves it was better for both of you", value: "c" },
+                    { text: "Yes, they weighed the risk/benefit and decided withholding was smarter", value: "d" }
+                ]
+            },
+            {
+                section: 3,
+                text: "Think of a time they really hurt your feelings. Did they know what they were doing would hurt?",
+                answers: [
+                    { text: "They've never intentionally hurt you", value: "a" },
+                    { text: "Not in the moment - only realized later how it landed", value: "b" },
+                    { text: "They knew you'd be upset but didn't think it would hurt as much", value: "c" },
+                    { text: "Yes, they knew exactly how it would land and did it anyway", value: "d" }
+                ]
+            },
+            {
+                section: 4,
+                text: "People who know them well would probably say they...",
+                answers: [
+                    { text: "Always consider how their actions affect others", value: "a" },
+                    { text: "Sometimes don't realize they've hurt someone until told", value: "b" },
+                    { text: "Can be focused on their own needs without meaning to hurt", value: "c" },
+                    { text: "Know how to get what they want from people", value: "d" }
+                ]
+            },
+            {
+                section: 4,
+                text: "When they want something from someone and they're resistant, they...",
+                answers: [
+                    { text: "Drop it and respect the no", value: "a" },
+                    { text: "Keep trying to explain hoping they'll understand", value: "b" },
+                    { text: "Get frustrated but eventually give up", value: "c" },
+                    { text: "Find another angle or wait for a better time to ask again", value: "d" }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+
+        function startQuiz() {
+            document.getElementById('introSection').style.display = 'none';
+            document.getElementById('quizSection').classList.add('active');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const question = questions[currentQuestion];
+            const container = document.getElementById('questionsContainer');
+            
+            container.innerHTML = `
+                <div class="question">
+                    <div class="question-number">Question ${currentQuestion + 1} of ${questions.length}</div>
+                    <div class="question-text">${question.text}</div>
+                    ${question.answers.map((answer, index) => `
+                        <div class="answer-option ${userAnswers[currentQuestion] === answer.value ? 'selected' : ''}" onclick="selectAnswer('${answer.value}', this)">
+                            <input type="radio" 
+                                   id="q${currentQuestion}_${index}" 
+                                   name="question${currentQuestion}" 
+                                   value="${answer.value}"
+                                   ${userAnswers[currentQuestion] === answer.value ? 'checked' : ''}>
+                            <label for="q${currentQuestion}_${index}">${answer.text}</label>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            updateProgress();
+            updateButtons();
+        }
+
+        function selectAnswer(value, element) {
+            userAnswers[currentQuestion] = value;
+            document.querySelectorAll('.answer-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+            updateButtons();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').disabled = !userAnswers[currentQuestion];
+            
+            if (currentQuestion === questions.length - 1 && userAnswers[currentQuestion]) {
+                document.getElementById('nextBtn').textContent = 'See Results';
+            } else {
+                document.getElementById('nextBtn').textContent = 'Next';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                calculateResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function calculateResults() {
+            let awarenessScore = 0;
+            for (let i = 0; i < 10; i++) {
+                if (userAnswers[i] === 'b' || userAnswers[i] === 'd') awarenessScore++;
+            }
+
+            let conscienceScore = 0;
+            for (let i = 10; i < 15; i++) {
+                if (userAnswers[i] === 'c' || userAnswers[i] === 'd') conscienceScore++;
+            }
+
+            let intentScore = 0;
+            if (userAnswers[15] === 'd') intentScore++;
+            if (userAnswers[16] === 'd') intentScore++;
+            if (userAnswers[17] === 'c' || userAnswers[17] === 'd') intentScore++;
+            if (userAnswers[18] === 'd') intentScore++;
+            if (userAnswers[19] === 'd') intentScore++;
+
+            const consistencyFlag = (userAnswers[20] === 'd' || userAnswers[21] === 'd');
+
+            let awareness = awarenessScore <= 3 ? 'offline' : (awarenessScore <= 7 ? 'online' : 'overload');
+            let conscience = conscienceScore <= 2 ? 'ethical' : 'nonethical';
+            let intent = intentScore <= 2 ? 'accidental' : 'purposeful';
+
+            displayResults(awareness, conscience, intent, consistencyFlag);
+        }
+
+        function displayResults(awareness, conscience, intent, consistency) {
+            document.getElementById('quizSection').style.display = 'none';
+            const resultPage = document.getElementById('resultPage');
+            resultPage.classList.add('active');
+
+            const key = `${awareness}_${conscience}_${intent}`;
+            const results = {
+                'offline_ethical_accidental': {
+                    title: 'They Don\'t See It',
+                    subtitle: 'Low Awareness + Has Conscience + Accidental Harm',
+                    content: `
+                        <p>They're operating mostly offline - they go blank, space out, genuinely don't remember conflicts. When you say they hurt you, they're confused because they weren't really present when it happened. They DO feel bad after - the guilt is real - but they can't see their patterns in real-time.</p>
+                        <h3>What this means for you:</h3>
+                        <p>They're not choosing to hurt you, but they're also not equipped to stop it. You can't rely on them to notice impact in the moment. They need awareness tools before anything else can work.</p>
+                        <h3>What might help them:</h3>
+                        <ul>
+                            <li>Mirror Archetype Quiz - to see their pattern</li>
+                            <li>Pattern tracking tools</li>
+                            <li>Understanding what they're protecting that keeps them offline</li>
+                        </ul>
+                        <a href="../quizzes.html" class="cta-button">Explore More Tools</a>
+                    `
+                },
+                'online_ethical_accidental': {
+                    title: 'They See Everything Except This',
+                    subtitle: 'High Awareness + Has Conscience + Accidental Harm',
+                    content: `
+                        <p>They're hypervigilant - constantly tracking, adjusting, remembering everything. They're exhausted from social interaction. When they hurt you, they're genuinely surprised because they thought they were tracking everything. They feel guilty after - the remorse is real.</p>
+                        <h3>What this means for you:</h3>
+                        <p>That awareness everyone admires is actually their threat response running 24/7. They're not manipulative - they're trying to stay safe. The blind spot around hurting you is real, not performed.</p>
+                        <h3>What might help them:</h3>
+                        <ul>
+                            <li>Understanding why every defense is firing at once</li>
+                            <li>Learning they can lower the threat scanner and still be safe</li>
+                            <li>Nervous system regulation work</li>
+                        </ul>
+                        <a href="../quizzes.html" class="cta-button">Explore More Tools</a>
+                    `
+                },
+                'online_nonethical_purposeful': {
+                    title: 'They Know Exactly What They\'re Doing',
+                    subtitle: 'High Awareness + No Remorse + Purposeful Harm',
+                    content: `
+                        <p>They're tracking everything. They're not accessing remorse. AND they purposefully hurt you. They see what they're doing and choose to do it without guilt stopping them.</p>
+                        <h3>What this means for you:</h3>
+                        <p>This is calculated harm without conscience anchoring behavior. The hypervigilance gives them data, and they use it strategically without remorse. This pattern rarely changes without intensive intervention - and they have to want to change.</p>
+                        <h3>Your path forward:</h3>
+                        <ul>
+                            <li>This is about your safety, not fixing them</li>
+                            <li>Coercive Control Recognition quiz for context</li>
+                            <li>Consider professional support for yourself</li>
+                        </ul>
+                        <a href="coercive-control.html" class="cta-button">Take Safety Assessment</a>
+                    `
+                },
+                'online_nonethical_accidental': {
+                    title: 'Strategic But Disconnected',
+                    subtitle: 'High Awareness + No Remorse + Accidental Harm',
+                    content: `
+                        <p>They're hypervigilant and strategic - they track reactions, adjust tactics, know how to get what they want. But when they hurt you it's genuinely not on purpose. They're blind to causing harm even while being hyperaware of everything else. Their conscience circuits either aren't firing or are overridden.</p>
+                        <h3>What this means for you:</h3>
+                        <p>They're effective at influence but disconnected from impact. The strategy and the harm exist in separate compartments. This might be structural - permanent compartmentalization that won't integrate through normal means.</p>
+                        <h3>Questions to consider:</h3>
+                        <ul>
+                            <li>Can they ACCESS remorse if they tried, or is that wiring absent?</li>
+                            <li>Are they protecting you from their pattern or expecting you to adapt?</li>
+                        </ul>
+                        <a href="../quizzes.html" class="cta-button">Explore More Tools</a>
+                    `
+                },
+                'overload_ethical_accidental': {
+                    title: 'System Breakdown',
+                    subtitle: 'Cycling + Has Conscience + Accidental Harm',
+                    content: `
+                        <p>Their system is cycling between extreme hypervigilance and total shutdown. They're tracking everything until they collapse. When they hurt you, they're genuinely blind to it even when they're hyperaware of everything else. They DO have guilt - the shame stays with them - but their nervous system is approaching breakdown.</p>
+                        <h3>What this means for you:</h3>
+                        <p>They're not manipulative, they're exhausted. Their system is screaming for stabilization. But you also can't be their stabilization - that's not sustainable for either of you.</p>
+                        <h3>What might help:</h3>
+                        <ul>
+                            <li>Intensive nervous system regulation</li>
+                            <li>Professional support if they're losing time or reality feels unstable</li>
+                            <li>Ground Zero framework for crisis patterns</li>
+                        </ul>
+                        <a href="ground-zero.html" class="cta-button">Ground Zero Assessment</a>
+                    `
+                }
+            };
+
+            const defaultResult = {
+                title: `${awareness.charAt(0).toUpperCase() + awareness.slice(1)} + ${conscience === 'ethical' ? 'Has Conscience' : 'No Remorse'} + ${intent === 'accidental' ? 'Accidental' : 'Purposeful'}`,
+                subtitle: 'Your unique pattern combination',
+                content: `
+                    <p>Based on your answers, this person shows a specific combination of awareness (${awareness}), conscience (${conscience}), and intent (${intent}).</p>
+                    <h3>Key insight:</h3>
+                    <p>${intent === 'purposeful' ? 'Purposeful harm is a significant concern regardless of other factors.' : 'Accidental harm means they\'re not choosing to hurt you, but they may not be equipped to stop it either.'}</p>
+                    <p>${conscience === 'nonethical' ? 'The absence of remorse means guilt won\'t stop future harm.' : 'They do feel remorse, which is a foundation for change if they choose to do the work.'}</p>
+                    ${consistency ? '<p><em>Note: They have strategic skills in getting what they want from people. Track whether this helps or hurts you.</em></p>' : ''}
+                    <a href="../quizzes.html" class="cta-button">Explore Related Quizzes</a>
+                `
+            };
+
+            const result = results[key] || defaultResult;
+            resultPage.innerHTML = `
+                <div class="result-header">
+                    <h1 class="result-title">${result.title}</h1>
+                    <p class="result-subtitle">${result.subtitle}</p>
+                </div>
+                <div class="result-content">
+                    ${result.content}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
+
